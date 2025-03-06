@@ -1,4 +1,4 @@
-module sanchitb23/url-shortener
+module url-shortener
 
 go 1.23.0
 
