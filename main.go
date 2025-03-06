@@ -3,14 +3,13 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"os"
+	"url-shortener/routes"
 )
 
 func main() {
 	server := gin.Default()
 
-	server.GET("/health", func(context *gin.Context) {
-		context.JSON(200, gin.H{"message": "OK"})
-	})
+	routes.RegisterRoutes(server)
 
 	port := os.Getenv("PORT")
 	if port == "" {
