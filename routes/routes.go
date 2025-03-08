@@ -2,17 +2,15 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	_ "url-shortener/docs" // This line is necessary for go-swagger to find your docs
 )
 
 func RegisterRoutes(server *gin.Engine) {
-	server.GET("/", func(context *gin.Context) {
-		context.Redirect(http.StatusMovedPermanently, "/health")
-	})
-	server.GET("/health", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{"message": "URL Shortener API is running"})
-	})
-
+	server.GET("/", RootRouteController)
+	server.GET("/health", HealthCheckController)
 	server.POST("/shorten", shortenURL)
 	server.GET("/:shortURL", redirectToOriginalURL)
+	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

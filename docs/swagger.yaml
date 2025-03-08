@@ -1,0 +1,63 @@
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      description: Redirects to the health check endpoint
+      responses:
+        "301":
+          description: Moved Permanently
+      tags:
+      - root
+  /{shortURL}:
+    get:
+      description: Redirects to the original URL based on the shortened URL
+      parameters:
+      - description: Shortened URL
+        in: path
+        name: shortURL
+        required: true
+        type: string
+      responses:
+        "301":
+          description: Moved Permanently
+      summary: Redirect to original URL
+      tags:
+      - url
+  /health:
+    get:
+      description: Returns the health status of the API
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      tags:
+      - health
+  /shorten:
+    post:
+      consumes:
+      - application/json
+      description: Shortens a given URL
+      parameters:
+      - description: URL to shorten
+        in: body
+        name: url
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Shorten URL
+      tags:
+      - url
+swagger: "2.0"
