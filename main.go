@@ -19,7 +19,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "10000"
+		port = "9999"
 	}
 	logger.Log.Info("Server is running on port 10000")
 	err := server.Run(":" + port)
