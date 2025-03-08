@@ -8,8 +8,8 @@ import (
 )
 
 func RegisterRoutes(server *gin.Engine) {
-	server.GET("/", RootRouteController)
-	server.GET("/health", HealthCheckController)
+	server.GET("/", rootRouteController)
+	server.GET("/health", healthCheckController)
 	server.POST("/shorten", shortenURL)
 	server.GET("/:shortURL", redirectToOriginalURL)
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

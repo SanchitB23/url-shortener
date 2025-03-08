@@ -21,6 +21,7 @@ const docTemplate = `{
                 "tags": [
                     "root"
                 ],
+                "summary": "Redirect to health check",
                 "responses": {
                     "301": {
                         "description": "Moved Permanently"
@@ -34,6 +35,7 @@ const docTemplate = `{
                 "tags": [
                     "health"
                 ],
+                "summary": "Health check",
                 "responses": {
                     "200": {
                         "description": "OK",
