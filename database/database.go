@@ -47,7 +47,7 @@ func createURLTables() error {
 					id SERIAL PRIMARY KEY,
 					original_url TEXT NOT NULL,
 					short_url VARCHAR(10) NOT NULL,
-					user_id INT NOT NULL
+					user_id INT NOT NULL,
 					created_at TIMESTAMP DEFAULT NOW()
 				)
 			`, GetUrlTableName())
