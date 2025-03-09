@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"url-shortener/config"
 	"url-shortener/database"
+	"url-shortener/utils"
 )
 
 type URL struct {
@@ -44,6 +45,25 @@ func (u *URL) Shorten(userId int64) (string, error) {
 		return "", errors.New("URL already exists for the user")
 	}
 
-	//todo
-	return "", nil
+	shortURLPath := utils.CreateShortUUID()
+
+	query := fmt.Sprintf(`INSERT INTO %s (original_url, short_url, user_id) VALUES ($1, $2, $3)`, database.GetUrlTableName())
+	smt, err := database.DB.Prepare(query)
+	defer func(smt *sql.Stmt) {
+		err := smt.Close()
+		if err != nil {
+			config.Log.Debug("Error closing statement", err)
+		}
+	}(smt)
+	if err != nil {
+		config.Log.Debug("Error preparing insert statement", err)
+		return "", err
+	}
+	_, err = smt.Exec(u.OriginalURL, shortURLPath, userId)
+	if err != nil {
+		config.Log.Debug("Error inserting URL", err)
+		return "", err
+	}
+	config.Log.Debug("Shortened URL saved in Db", shortURLPath)
+	return shortURLPath, nil
 }
