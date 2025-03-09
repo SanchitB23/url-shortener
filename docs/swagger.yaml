@@ -7,7 +7,6 @@ paths:
       responses:
         "301":
           description: Moved Permanently
-      summary: Redirect to health check
       tags:
       - root
   /{shortURL}:
@@ -22,7 +21,6 @@ paths:
       responses:
         "301":
           description: Moved Permanently
-      summary: Redirect to original URL
       tags:
       - url
   /health:
@@ -35,7 +33,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Health check
       tags:
       - health
   /shorten:
@@ -59,7 +56,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-      summary: Shorten URL
       tags:
       - url
 swagger: "2.0"

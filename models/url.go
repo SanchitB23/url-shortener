@@ -10,5 +10,6 @@ type URL struct {
 
 func (u *URL) Shorten() (string, error) {
 	// Logic to save the URL goes here
+	//todo
 	return "", nil
 }

@@ -10,7 +10,6 @@
                 "tags": [
                     "root"
                 ],
-                "summary": "Redirect to health check",
                 "responses": {
                     "301": {
                         "description": "Moved Permanently"
@@ -24,7 +23,6 @@
                 "tags": [
                     "health"
                 ],
-                "summary": "Health check",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -50,7 +48,6 @@
                 "tags": [
                     "url"
                 ],
-                "summary": "Shorten URL",
                 "parameters": [
                     {
                         "description": "URL to shorten",
@@ -81,7 +78,6 @@
                 "tags": [
                     "url"
                 ],
-                "summary": "Redirect to original URL",
                 "parameters": [
                     {
                         "type": "string",

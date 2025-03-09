@@ -1,4 +1,4 @@
-package logger
+package config
 
 import (
 	"github.com/sirupsen/logrus"
@@ -8,7 +8,7 @@ import (
 
 var Log *logrus.Logger
 
-func Init() {
+func InitLogger() {
 	Log = logrus.New()
 	Log.SetFormatter(&logrus.JSONFormatter{})
 	Log.SetOutput(os.Stdout)

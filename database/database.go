@@ -2,34 +2,46 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/lib/pq"
 	"os"
-	"url-shortener/logger"
+	"url-shortener/config"
 )
 
 var DB *sql.DB
+var urlTableName string
+var userTableName string
 
-func InitDB() {
+func InitPostgresDB() error {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		logger.Log.Panic("DATABASE_URL environment variable not set")
+		config.Log.Panic("DATABASE_URL environment variable not set")
+		return errors.New("DATABASE_URL environment variable not set")
 	}
 	var err error
 	DB, err = sql.Open("postgres", dsn)
 	if err != nil {
-		logger.Log.Panic("Failed to connect to the database", err)
+		config.Log.Panic("Failed to connect to the database", err)
+		return err
 	}
 	err = DB.Ping()
 	if err != nil {
-		logger.Log.Panic("Failed to ping the database", err)
+		config.Log.Panic("Failed to ping the database", err)
+		return err
 	}
-	logger.Log.Info("Successfully connected to the database")
-	createTables()
+	config.Log.Info("Successfully connected to the database")
+	urlTableName = os.Getenv("URL_TABLE_NAME")
+	userTableName = os.Getenv("USER_TABLE_NAME")
+
+	err = createTables()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func createTables() {
-	tableName := os.Getenv("URL_TABLE_NAME")
+func createTables() error {
 	createURLsTable := fmt.Sprintf(`
 				CREATE TABLE IF NOT EXISTS %s (
 					id SERIAL PRIMARY KEY,
@@ -37,11 +49,19 @@ func createTables() {
 					short_url TEXT NOT NULL,
 					user_id INT NOT NULL
 				)
-			`, tableName)
+			`, GetUrlTableName())
 	_, err := DB.Exec(createURLsTable)
 	if err != nil {
-		logger.Log.Panic("Failed to create urls table", err)
-	} else {
-		logger.Log.Info("Successfully created urls table")
+		config.Log.Panic("Failed to create urls table", err)
+		return err
 	}
+	config.Log.Info("Successfully created urls table")
+	return nil
+}
+
+func GetUrlTableName() string {
+	return urlTableName
+}
+func GetUserTableName() string {
+	return userTableName
 }

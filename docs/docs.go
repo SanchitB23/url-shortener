@@ -21,7 +21,6 @@ const docTemplate = `{
                 "tags": [
                     "root"
                 ],
-                "summary": "Redirect to health check",
                 "responses": {
                     "301": {
                         "description": "Moved Permanently"
@@ -35,7 +34,6 @@ const docTemplate = `{
                 "tags": [
                     "health"
                 ],
-                "summary": "Health check",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -61,7 +59,6 @@ const docTemplate = `{
                 "tags": [
                     "url"
                 ],
-                "summary": "Shorten URL",
                 "parameters": [
                     {
                         "description": "URL to shorten",
@@ -92,7 +89,6 @@ const docTemplate = `{
                 "tags": [
                     "url"
                 ],
-                "summary": "Redirect to original URL",
                 "parameters": [
                     {
                         "type": "string",
