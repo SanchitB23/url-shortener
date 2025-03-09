@@ -11,6 +11,6 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/", rootRouteController)
 	server.GET("/health", healthCheckController)
 	server.POST("/shorten", shortenURL)
-	server.GET("/:shortURL", redirectToOriginalURL)
 	server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	server.GET("/:shortURL", redirectToOriginalURL)
 }
