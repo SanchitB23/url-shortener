@@ -30,7 +30,6 @@ func SetupAndRunApp() error {
 	server := gin.Default()
 
 	routes.SetupRoutes(server)
-	config.AddSwaggerRoutes(server)
 
 	port := os.Getenv("PORT")
 	if port == "" {
