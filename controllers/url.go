@@ -7,6 +7,7 @@ import (
 	_ "url-shortener/docs" // This line is necessary for go-swagger to find your docs
 	"url-shortener/middlewares"
 	"url-shortener/models"
+	"url-shortener/utils"
 )
 
 // ShortenURL @Summary Shorten URL
@@ -36,7 +37,7 @@ func ShortenURL(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"shortenedURL": `https://` + context.Request.Host + `/` + shortenedURL})
+	context.JSON(http.StatusOK, gin.H{"shortenedURL": utils.GetHttpProtocol(context) + `://` + context.Request.Host + `/` + shortenedURL})
 }
 
 // RedirectToOriginalURL @Summary Redirect to original URL
