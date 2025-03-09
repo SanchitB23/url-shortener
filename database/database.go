@@ -34,20 +34,21 @@ func InitPostgresDB() error {
 	urlTableName = os.Getenv("URL_TABLE_NAME")
 	userTableName = os.Getenv("USER_TABLE_NAME")
 
-	err = createTables()
+	err = createURLTables()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func createTables() error {
+func createURLTables() error {
 	createURLsTable := fmt.Sprintf(`
 				CREATE TABLE IF NOT EXISTS %s (
 					id SERIAL PRIMARY KEY,
-					long_url TEXT NOT NULL,
-					short_url TEXT NOT NULL,
+					original_url TEXT NOT NULL,
+					short_url VARCHAR(10) NOT NULL,
 					user_id INT NOT NULL
+					created_at TIMESTAMP DEFAULT NOW()
 				)
 			`, GetUrlTableName())
 	_, err := DB.Exec(createURLsTable)

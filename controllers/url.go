@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"url-shortener/config"
 	_ "url-shortener/docs" // This line is necessary for go-swagger to find your docs
+	"url-shortener/middlewares"
 	"url-shortener/models"
 )
 
@@ -18,6 +19,7 @@ import (
 // @Router /shorten [post]
 func ShortenURL(context *gin.Context) {
 
+	userID := middlewares.GetCurrentUser(context)
 	var urlObj models.URL
 
 	if err := context.ShouldBindJSON(&urlObj); err != nil {
@@ -26,8 +28,9 @@ func ShortenURL(context *gin.Context) {
 		return
 	}
 	config.Log.Debugf("Host URL: %v", context.Request.Host)
-	shortenedURL, err := urlObj.Shorten()
+	shortenedURL, err := urlObj.Shorten(userID)
 	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "message": "Failed to shorten URL"})
 		return
 	}
 
