@@ -42,6 +42,7 @@ paths:
       description: Shortens a given URL
       parameters:
       - description: URL to shorten
+        example: '{original_url: "https://example.com"}'
         in: body
         name: url
         required: true
@@ -52,6 +53,18 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
           schema:
             additionalProperties:
               type: string

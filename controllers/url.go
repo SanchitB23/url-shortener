@@ -14,8 +14,10 @@ import (
 // @Tags url
 // @Accept json
 // @Produce json
-// @Param url body string true "URL to shorten"
+// @Param url body string true "URL to shorten" example({original_url: "https://example.com"})
 // @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
 // @Router /shorten [post]
 func ShortenURL(context *gin.Context) {
 
@@ -33,8 +35,6 @@ func ShortenURL(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "message": "Failed to shorten URL"})
 		return
 	}
-
-	// Logic to shorten the URL goes here
 
 	context.JSON(http.StatusOK, gin.H{"shortenedURL": shortenedURL})
 }
