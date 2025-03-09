@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/segmentio/ksuid"
+	"net/url"
 	"os"
 	"strconv"
 )
@@ -21,4 +22,9 @@ func GetHttpProtocol(context *gin.Context) string {
 		return "https"
 	}
 	return "http"
+}
+
+func IsValidURL(str string) bool {
+	u, err := url.Parse(str)
+	return err == nil && u.Scheme != "" && u.Host != ""
 }

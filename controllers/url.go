@@ -30,6 +30,13 @@ func ShortenURL(context *gin.Context) {
 		config.Log.Debug("Error binding JSON: ", err, context.JSON)
 		return
 	}
+
+	if !utils.IsValidURL(urlObj.OriginalURL) {
+		config.Log.Debug("Invalid URL: ", urlObj.OriginalURL)
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid URL", "message": "Please provide a valid URL"})
+		return
+	}
+
 	config.Log.Debugf("Host URL: %v", context.Request.Host)
 	err := urlObj.Shorten()
 	if err != nil {
