@@ -22,8 +22,8 @@ import (
 // @Router /shorten [post]
 func ShortenURL(context *gin.Context) {
 
-	userID := middlewares.GetCurrentUser(context)
 	var urlObj models.URL
+	urlObj.UserID = middlewares.GetCurrentUser(context)
 
 	if err := context.ShouldBindJSON(&urlObj); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -31,13 +31,13 @@ func ShortenURL(context *gin.Context) {
 		return
 	}
 	config.Log.Debugf("Host URL: %v", context.Request.Host)
-	shortenedURL, err := urlObj.Shorten(userID)
+	err := urlObj.Shorten()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "message": "Failed to shorten URL"})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"shortenedURL": utils.GetHttpProtocol(context) + `://` + context.Request.Host + `/` + shortenedURL})
+	context.JSON(http.StatusOK, gin.H{"shortenedURL": utils.GetHttpProtocol(context) + `://` + context.Request.Host + `/` + urlObj.ShortURL})
 }
 
 // RedirectToOriginalURL @Summary Redirect to original URL

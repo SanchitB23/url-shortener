@@ -33,19 +33,19 @@ func checkIfOriginalURLExists(originalUrl string, userId int64) (bool, error) {
 	return true, nil
 }
 
-func (u *URL) Shorten(userId int64) (string, error) {
+func (u *URL) Shorten() error {
 	// Logic to save the URL goes here
-	exists, err := checkIfOriginalURLExists(u.OriginalURL, userId)
+	exists, err := checkIfOriginalURLExists(u.OriginalURL, u.UserID)
 	if err != nil {
 		config.Log.Debugf("Error in checking if long URL exists: %v", err)
-		return "", err
+		return err
 	}
 	if exists {
-		config.Log.Debug("URL already exists", u.ShortURL, userId)
-		return "", errors.New("URL already exists for the user")
+		config.Log.Debug("URL already exists", u.OriginalURL, u.UserID)
+		return errors.New("URL already exists for the user")
 	}
 
-	shortURLPath := utils.CreateShortUUID()
+	u.ShortURL = utils.CreateShortUUID()
 
 	query := fmt.Sprintf(`INSERT INTO %s (original_url, short_url, user_id) VALUES ($1, $2, $3)`, database.GetUrlTableName())
 	smt, err := database.DB.Prepare(query)
@@ -57,13 +57,13 @@ func (u *URL) Shorten(userId int64) (string, error) {
 	}(smt)
 	if err != nil {
 		config.Log.Debug("Error preparing insert statement", err)
-		return "", err
+		return err
 	}
-	_, err = smt.Exec(u.OriginalURL, shortURLPath, userId)
+	_, err = smt.Exec(u.OriginalURL, u.ShortURL, u.UserID)
 	if err != nil {
 		config.Log.Debug("Error inserting URL", err)
-		return "", err
+		return err
 	}
-	config.Log.Debug("Shortened URL saved in Db", shortURLPath)
-	return shortURLPath, nil
+	config.Log.Debug("Shortened URL saved in Db", u.ShortURL)
+	return nil
 }
