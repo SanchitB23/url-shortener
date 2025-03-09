@@ -67,3 +67,9 @@ func (u *URL) Shorten() error {
 	config.Log.Debug("Shortened URL saved in Db", u.ShortURL)
 	return nil
 }
+
+func (u *URL) GetOriginalURL() error {
+	query := fmt.Sprintf(`SELECT original_url FROM %s WHERE short_url = $1 AND user_id = $2`, database.GetUrlTableName())
+	row := database.DB.QueryRow(query, u.ShortURL, u.UserID)
+	return row.Scan(&u.OriginalURL)
+}

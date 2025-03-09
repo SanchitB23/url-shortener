@@ -54,5 +54,15 @@ func ShortenURL(context *gin.Context) {
 // @Success 301
 // @Router /{shortURL} [get]
 func RedirectToOriginalURL(context *gin.Context) {
-	context.JSON(http.StatusNotImplemented, gin.H{"message": "Not Implemented"})
+	var urlObj models.URL
+	urlObj.ShortURL = context.Request.URL.Path[1:]
+	urlObj.UserID = middlewares.GetCurrentUser(context)
+
+	err := urlObj.GetOriginalURL()
+	if err != nil {
+		config.Log.Debug("Error getting original URL: ", err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error(), "message": "Failed to get original URL"})
+		return
+	}
+	context.Redirect(http.StatusMovedPermanently, urlObj.OriginalURL)
 }
