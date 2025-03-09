@@ -36,7 +36,7 @@ func ShortenURL(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"shortenedURL": shortenedURL})
+	context.JSON(http.StatusOK, gin.H{"shortenedURL": `https://` + context.Request.Host + `/` + shortenedURL})
 }
 
 // RedirectToOriginalURL @Summary Redirect to original URL
